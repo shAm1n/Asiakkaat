@@ -1,17 +1,25 @@
 package model;
 
 public class Asiakas {
+	private int asiakas_id;
 	private String etunimi, sukunimi, puh, sposti;
 	
 	public Asiakas() {
 		super();
 	}
-	public Asiakas(String etunimi, String sukunimi, String puh, String sposti) {
+	public Asiakas(int asiakas_id, String etunimi, String sukunimi, String puh, String sposti) {
 		super();
+		this.asiakas_id=asiakas_id;
 		this.etunimi = etunimi;
 		this.sukunimi = sukunimi;
 		this.puh = puh;
 		this.sposti = sposti;
+	}
+	public int getAsiakas_id() {
+		return asiakas_id;
+	}
+	public void setAsiakas_id(int asiakas_id) {
+		this.asiakas_id = asiakas_id;
 	}
 	public String getEtunimi() {
 		return etunimi;
@@ -39,6 +47,7 @@ public class Asiakas {
 	}
 	@Override
 	public String toString() {
-		return "Asiakas [etunimi=" + etunimi + ", sukunimi=" + sukunimi + ", puh=" + puh + ", sposti=" + sposti + "]";
+		return "Asiakas [asiakas_id=" + asiakas_id + ", etunimi=" + etunimi + ", sukunimi=" + sukunimi + ", puh=" + puh
+				+ ", sposti=" + sposti + "]";
 	}
 }
