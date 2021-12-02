@@ -24,12 +24,13 @@
 			<th>Sukunimi</th>
 			<th>Puhelin</th>
 			<th>Sähköposti</th>
-			<th></th>
+			<th>&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
+</body>
 <script>
 $(document).ready(function() {
 	
@@ -37,15 +38,14 @@ $(document).ready(function() {
 		document.location="lisaaAsiakas.jsp";
 	});
 	
-	haeAsiakkaat();
-	$("#haku").click(function() {		
-		haeAsiakkaat();
-	});
-	
 	$(document.body).on("keydown", function(event) {
 		  if(event.which==13) {
 			  haeAsiakkaat();
 		  }});
+	
+	$("#haku").click(function() {		
+		haeAsiakkaat();
+	});
 
 	$("#hakusana").focus();
 		haeAsiakkaat();
@@ -61,25 +61,25 @@ function haeAsiakkaat() {
 			htmlStr+="<td>"+field.sukunimi+"</td>";
 			htmlStr+="<td>"+field.puh+"</td>";
 			htmlStr+="<td>"+field.sposti+"</td>";
-			htmlStr+="<td><span class='poista' onclick=poista('"+field.asiakas_id+"')>Poista</span></td>";
+			htmlStr+="<td><a href='muutaAsiakas.jsp?asiakas_id="+field.asiakas_id+"'>Muuta</a>&nbsp;";
+			htmlStr+="<td><span class='poista' onclick=poista('"+field.asiakas_id+"','"+field.etunimi+"','"+field.sukunimi+"')>Poista</span></td>";
 			htmlStr+="</tr>";
 			$("#listaus tbody").append(htmlStr);
 		});
 	}});
 }
-function poista(asiakas_id){
-	if(confirm("Poista auto " + asiakas_id +"?")){
+function poista(asiakas_id, etunimi, sukunimi) {
+	if(confirm("Poista asiakas "+etunimi+" " +sukunimi+"?")){
 		$.ajax({url:"asiakkaat/"+asiakas_id, type:"DELETE", dataType:"json", success:function(result) {
-	        if(result.response==0){
+	        if(result.response==0) {
 	        	$("#ilmo").html("Asiakkaan poisto epäonnistui.");
-	        }else if(result.response==1){
+	        } else if(result.response==1) {
 	        	$("#rivi_"+asiakas_id).css("background-color", "red");
-	        	alert("Asiakkaan " +asiakas_id+" poisto onnistui.");
+	        	alert("Asiakkaan "+etunimi+" " +sukunimi+" poisto onnistui.");
 				haeAsiakkaat();        	
 			}
 	    }});
 	}
 }
 </script>
-</body>
 </html>

@@ -22,7 +22,7 @@ public class Dao {
     		Class.forName("org.sqlite.JDBC");
 	        con = DriverManager.getConnection(url);	
 	        System.out.println("Yhteys avattu.");
-	     }catch (Exception e){	
+	     } catch (Exception e) {	
 	    	 System.out.println("Yhteyden avaus epäonnistui.");
 	        e.printStackTrace();	         
 	     }
@@ -79,7 +79,7 @@ public class Dao {
 					}
 				}
 			}
-			con.close();
+		con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -110,6 +110,50 @@ public class Dao {
 			con = yhdista();
 			stmtPrep=con.prepareStatement(sql);
 			stmtPrep.setInt(1, asiakas_id);			
+			stmtPrep.executeUpdate();
+	        con.close();
+		} catch (Exception e) {				
+			e.printStackTrace();
+			paluuArvo=false;
+		}				
+		return paluuArvo;
+	}
+	public Asiakas etsiAsiakas(int asiakas_id) {
+		Asiakas asiakas = null;
+		sql = "SELECT * FROM asiakkaat WHERE asiakas_id=?";       
+		try {
+			con=yhdista();
+			if(con!=null) { 
+				stmtPrep = con.prepareStatement(sql); 
+				stmtPrep.setInt(1, asiakas_id);
+        		rs = stmtPrep.executeQuery();  
+        		if(rs.isBeforeFirst()) {
+        			rs.next();
+        			asiakas = new Asiakas();			
+        			asiakas.setEtunimi(rs.getString(2));
+					asiakas.setSukunimi(rs.getString(3));
+					asiakas.setPuh(rs.getString(4));
+					asiakas.setSposti(rs.getString(5));       			      			
+				}        		
+			}	
+			con.close();  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return asiakas;		
+	}
+	
+	public boolean muutaAsiakas(Asiakas asiakas, int id){
+		boolean paluuArvo=true;
+		sql="UPDATE asiakkaat SET etunimi=?, sukunimi=?, puh=?, sposti=? WHERE asiakas_id=?";						  
+		try {
+			con = yhdista();
+			stmtPrep=con.prepareStatement(sql); 
+			stmtPrep.setString(1, asiakas.getEtunimi());
+			stmtPrep.setString(2, asiakas.getSukunimi());
+			stmtPrep.setString(3, asiakas.getPuh());
+			stmtPrep.setString(4, asiakas.getSposti());
+			stmtPrep.setInt(5, id);
 			stmtPrep.executeUpdate();
 	        con.close();
 		} catch (Exception e) {				
