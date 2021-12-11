@@ -57,7 +57,7 @@ public class Dao {
 	}
 	public ArrayList<Asiakas> listaaKaikki(String hakusana){
 		ArrayList<Asiakas> asiakkaat = new ArrayList<Asiakas>();
-		sql = "SELECT * FROM asiakkaat WHERE etunimi LIKE ? OR sukunimi LIKE ? OR puhelin LIKE ? OR sposti LIKE ?";       
+		sql = "SELECT * FROM asiakkaat WHERE etunimi LIKE ? OR sukunimi LIKE ? OR sposti LIKE ?";       
 		try {
 			con=yhdista();
 			if(con!=null){
@@ -65,7 +65,6 @@ public class Dao {
 				stmtPrep.setString(1, "%" + hakusana + "%");
 				stmtPrep.setString(2, "%" + hakusana + "%");   
 				stmtPrep.setString(3, "%" + hakusana + "%");
-				stmtPrep.setString(4, "%" + hakusana + "%");
         		rs = stmtPrep.executeQuery();
 				if(rs!=null){
 					while(rs.next()){
@@ -134,16 +133,16 @@ public class Dao {
 					asiakas.setSukunimi(rs.getString(3));
 					asiakas.setPuh(rs.getString(4));
 					asiakas.setSposti(rs.getString(5));       			      			
-				}        		
-			}	
-			con.close();  
+				}
+			con.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		return asiakas;		
 	}
 	
-	public boolean muutaAsiakas(Asiakas asiakas, int id){
+	public boolean muutaAsiakas(Asiakas asiakas){
 		boolean paluuArvo=true;
 		sql="UPDATE asiakkaat SET etunimi=?, sukunimi=?, puh=?, sposti=? WHERE asiakas_id=?";						  
 		try {
@@ -153,7 +152,7 @@ public class Dao {
 			stmtPrep.setString(2, asiakas.getSukunimi());
 			stmtPrep.setString(3, asiakas.getPuh());
 			stmtPrep.setString(4, asiakas.getSposti());
-			stmtPrep.setInt(5, id);
+			stmtPrep.setInt(5, asiakas.getAsiakas_id());
 			stmtPrep.executeUpdate();
 	        con.close();
 		} catch (Exception e) {				

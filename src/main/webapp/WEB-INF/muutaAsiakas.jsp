@@ -12,7 +12,7 @@
 </head>
 <body>
 <form id="tiedot">
-	<table>
+	<table class="table">
 		<thead>	
 			<tr>
 				<th colspan="5" class="oikealle"><span id="takaisin">Takaisin listaukseen</span></th>
@@ -22,7 +22,7 @@
 				<th>Sukunimi</th>
 				<th>Puhelin</th>
 				<th>Sähköposti</th>
-				<th></th>
+				<th>Hallinta</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -31,7 +31,7 @@
 				<td><input type="text" name="sukunimi" id="sukunimi"></td>
 				<td><input type="text" name="puh" id="puh"></td>
 				<td><input type="text" name="sposti" id="sposti"></td> 
-				<td><input type="submit" id="tallenna" value="Hyväksy"></td>
+				<td><input type="submit" value="Tallenna" id="tallenna"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -47,11 +47,11 @@ $(document).ready(function() {
 	
 	var asiakas_id = requestURLParam("asiakas_id");
 	$.ajax({url:"asiakkaat/haeyksi/"+asiakas_id, type:"GET", dataType:"json", success:function(result) {
-		$("#vanhaid").val(result.asiakas_id);
 		$("#etunimi").val(result.etunimi);
 		$("#sukunimi").val(result.sukunimi);
 		$("#puh").val(result.puh);
 		$("#sposti").val(result.sposti);
+		$("#vanhaid").val(result.asiakas_id);
     }});
 	
 	$("#tiedot").validate({						
@@ -66,9 +66,7 @@ $(document).ready(function() {
 			},
 			puh:  {
 				required: true,
-				pattern: /^[0-9()-\s]+$/,
-				minlength: 10,
-				maxlength: 20
+				minlength: 5
 			},	
 			sposti:  {
 				required: true,
@@ -86,7 +84,6 @@ $(document).ready(function() {
 			},
 			puh: {
 				required: "Puuttuu",
-				pattern: "Anna puhelinnumero",
 				minlength: "Liian lyhyt"
 			},
 			sposti: {
@@ -109,7 +106,6 @@ function paivitaTiedot(){
       		$("#ilmo").html("Asiakkaan päivittäminen epäonnistui.");
 		} else if(result.response==1) {
       		$("#ilmo").html("Asiakkaan päivittäminen onnistui.");
-      		$("#etunimi", "#sukunimi", "#puh", "#sposti").val("");
 	  }
   }});	
 }
